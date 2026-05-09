@@ -1,125 +1,153 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dripwear Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DRIPWEAR Builder</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <style>
+    .draggable {
+      position: absolute;
+      cursor: move;
+      user-select: none;
+    }
+  </style>
 </head>
 
-<body class="bg-[#0b0b0b] text-white min-h-screen font-sans">
+<body class="bg-[#0b0b0b] text-white min-h-screen font-sans overflow-hidden">
 
-  <div class="max-w-7xl mx-auto p-8">
+  <div class="flex h-screen">
 
-    <div class="flex items-center justify-between mb-10">
-      <h1 class="text-4xl font-black tracking-wide">DRIPWEAR</h1>
+    <!-- SIDEBAR -->
+    <div class="w-[320px] bg-black border-r border-white/10 p-6 overflow-y-auto">
 
-      <button class="bg-white text-black px-6 py-3 rounded-full font-semibold">
-        Custom Builder
-      </button>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-10 items-center">
-
-      <!-- TSHIRT PREVIEW -->
-      <div class="bg-[#111111] rounded-[40px] p-10 flex items-center justify-center min-h-[700px] border border-white/10">
-
-        <div id="shirt"
-          class="relative w-[340px] h-[430px] bg-white rounded-[50px] flex items-center justify-center shadow-2xl transition-all duration-300">
-
-          <!-- neck -->
-          <div class="absolute top-0 w-24 h-14 bg-[#0b0b0b] rounded-b-[30px]"></div>
-
-          <!-- uploaded image -->
-          <img id="designImage"
-            class="absolute w-40 hidden"
-            src=""
-          />
-
-          <!-- text -->
-          <h2 id="shirtText"
-            class="text-5xl font-black text-black text-center px-4 break-words">
-            DRIP
-          </h2>
-        </div>
+      <!-- LOGO -->
+      <div class="mb-10">
+        <img
+          src="logo.png"
+          class="h-20 object-contain"
+        />
       </div>
 
 
-      <!-- CONTROLS -->
-      <div class="space-y-6">
+      <!-- VIEW SWITCH -->
+      <div class="mb-10">
 
-        <div class="bg-[#111111] p-8 rounded-[30px] border border-white/10">
-          <h2 class="text-2xl font-bold mb-6">Customise Your Tee</h2>
+        <p class="text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          Choose View
+        </p>
 
-          <div class="mb-6">
-            <label class="block mb-3 text-white/70">Custom Text</label>
+        <div class="grid grid-cols-2 gap-3">
 
-            <input
-              id="textInput"
-              type="text"
-              placeholder="Enter text"
-              class="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 outline-none"
-            />
-          </div>
-
-          <div class="mb-6">
-            <label class="block mb-3 text-white/70">T-Shirt Color</label>
-
-            <div class="flex gap-4 flex-wrap">
-              <button onclick="changeShirtColor('#ffffff')" class="w-12 h-12 rounded-full bg-white border-2 border-white/30"></button>
-
-              <button onclick="changeShirtColor('#000000')" class="w-12 h-12 rounded-full bg-black border-2 border-white"></button>
-
-              <button onclick="changeShirtColor('#8B0000')" class="w-12 h-12 rounded-full bg-red-900"></button>
-
-              <button onclick="changeShirtColor('#E6C79C')" class="w-12 h-12 rounded-full bg-yellow-200"></button>
-
-              <button onclick="changeShirtColor('#1e3a8a')" class="w-12 h-12 rounded-full bg-blue-900"></button>
-            </div>
-          </div>
-
-          <div class="mb-6">
-            <label class="block mb-3 text-white/70">Text Color</label>
-
-            <div class="flex gap-4 flex-wrap">
-              <button onclick="changeTextColor('#000000')" class="w-12 h-12 rounded-full bg-black border border-white"></button>
-
-              <button onclick="changeTextColor('#ffffff')" class="w-12 h-12 rounded-full bg-white"></button>
-
-              <button onclick="changeTextColor('#8B0000')" class="w-12 h-12 rounded-full bg-red-900"></button>
-
-              <button onclick="changeTextColor('#facc15')" class="w-12 h-12 rounded-full bg-yellow-400"></button>
-            </div>
-          </div>
-
-          <div class="mb-8">
-            <label class="block mb-3 text-white/70">Upload Design</label>
-
-            <input
-              id="imageUpload"
-              type="file"
-              accept="image/*"
-              class="block w-full text-sm text-white"
-            />
-          </div>
-
-          <button class="w-full bg-white text-black py-4 rounded-2xl text-lg font-bold hover:scale-[1.02] transition">
-            Add To Cart
+          <button
+            onclick="changeView('front')"
+            class="bg-white text-black py-3 rounded-2xl font-bold"
+          >
+            Front
           </button>
+
+          <button
+            onclick="changeView('back')"
+            class="bg-white/10 py-3 rounded-2xl font-bold"
+          >
+            Back
+          </button>
+
         </div>
 
+      </div>
 
-        <div class="bg-[#111111] p-8 rounded-[30px] border border-white/10">
-          <h3 class="text-2xl font-bold mb-4">Premium Details</h3>
 
-          <div class="space-y-3 text-white/60">
-            <p>• 240 GSM Heavyweight Cotton</p>
-            <p>• Oversized Streetwear Fit</p>
-            <p>• HD Print Quality</p>
-            <p>• Live Design Preview</p>
-          </div>
+
+      <!-- UPLOAD DESIGN -->
+      <div class="mb-10">
+
+        <p class="text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          Upload Design
+        </p>
+
+        <input
+          id="designUpload"
+          type="file"
+          accept="image/*"
+          class="block w-full text-sm"
+        />
+
+      </div>
+
+
+
+      <!-- RESIZE -->
+      <div class="mb-10">
+
+        <p class="text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          Resize Design
+        </p>
+
+        <input
+          type="range"
+          min="50"
+          max="350"
+          value="140"
+          id="sizeSlider"
+          class="w-full"
+        />
+
+      </div>
+
+
+
+      <!-- ORDER BUTTON -->
+      <button
+        onclick="sendOrder()"
+        class="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg"
+      >
+        Send Order
+      </button>
+
+    </div>
+
+
+
+
+    <!-- MAIN PREVIEW -->
+    <div class="flex-1 flex items-center justify-center p-10">
+
+      <div
+        class="bg-[#111111] border border-white/10 rounded-[40px] w-full h-full flex items-center justify-center relative overflow-hidden"
+      >
+
+        <!-- CAPTURE AREA -->
+        <div
+          id="captureArea"
+          class="relative"
+        >
+
+          <!-- SHIRT -->
+          <img
+            id="shirtImage"
+            src="front.png"
+            class="w-[600px] select-none"
+            draggable="false"
+          />
+
+
+
+          <!-- DESIGN -->
+          <img
+            id="logoDesign"
+            class="draggable hidden"
+            style="
+              width:140px;
+              top:220px;
+              left:230px;
+            "
+          />
+
         </div>
 
       </div>
@@ -129,39 +157,134 @@
   </div>
 
 
+
+
   <script>
-    const shirt = document.getElementById('shirt')
-    const shirtText = document.getElementById('shirtText')
-    const textInput = document.getElementById('textInput')
-    const imageUpload = document.getElementById('imageUpload')
-    const designImage = document.getElementById('designImage')
 
-    textInput.addEventListener('input', () => {
-      shirtText.innerText = textInput.value || 'DRIP'
-    })
+    const shirtImage = document.getElementById('shirtImage')
+    const designUpload = document.getElementById('designUpload')
+    const logoDesign = document.getElementById('logoDesign')
+    const sizeSlider = document.getElementById('sizeSlider')
 
-    function changeShirtColor(color) {
-      shirt.style.background = color
+
+
+    // FRONT / BACK SWITCH
+    function changeView(view) {
+
+      if(view === 'front') {
+        shirtImage.src = 'front.png'
+      }
+
+      if(view === 'back') {
+        shirtImage.src = 'back.png'
+      }
+
     }
 
-    function changeTextColor(color) {
-      shirtText.style.color = color
-    }
 
-    imageUpload.addEventListener('change', function(e) {
+
+    // UPLOAD DESIGN
+    designUpload.addEventListener('change', function(e) {
+
       const file = e.target.files[0]
 
       if(file) {
+
         const reader = new FileReader()
 
         reader.onload = function(event) {
-          designImage.src = event.target.result
-          designImage.classList.remove('hidden')
+
+          logoDesign.src = event.target.result
+
+          logoDesign.classList.remove('hidden')
+
         }
 
         reader.readAsDataURL(file)
+
       }
+
     })
+
+
+
+    // RESIZE DESIGN
+    sizeSlider.addEventListener('input', function() {
+
+      logoDesign.style.width = this.value + 'px'
+
+    })
+
+
+
+    // DRAG SYSTEM
+    let isDragging = false
+    let offsetX
+    let offsetY
+
+
+
+    logoDesign.addEventListener('mousedown', (e) => {
+
+      isDragging = true
+
+      offsetX = e.offsetX
+      offsetY = e.offsetY
+
+    })
+
+
+
+    document.addEventListener('mousemove', (e) => {
+
+      if (!isDragging) return
+
+      const parentRect =
+        logoDesign.parentElement.getBoundingClientRect()
+
+      logoDesign.style.left =
+        (e.clientX - parentRect.left - offsetX) + 'px'
+
+      logoDesign.style.top =
+        (e.clientY - parentRect.top - offsetY) + 'px'
+
+    })
+
+
+
+    document.addEventListener('mouseup', () => {
+
+      isDragging = false
+
+    })
+
+
+
+    // SEND ORDER
+    function sendOrder() {
+
+      html2canvas(document.getElementById('captureArea'))
+        .then(canvas => {
+
+          // DOWNLOAD IMAGE
+          const link = document.createElement('a')
+
+          link.download = 'dripwear-design.png'
+
+          link.href = canvas.toDataURL()
+
+          link.click()
+
+
+
+          // OPEN EMAIL
+          window.location.href =
+            'mailto:d.r.i.p.wear009@gmail.com?subject=Custom%20Tshirt%20Order&body=Please%20attach%20the%20downloaded%20mockup%20PNG%20to%20this%20mail.'
+
+        })
+
+    }
+
   </script>
 
 </body>
