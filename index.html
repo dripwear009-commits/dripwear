@@ -1,26 +1,170 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dripwear</title>
+  <title>Dripwear Builder</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-black text-white min-h-screen flex items-center justify-center">
+<body class="bg-[#0b0b0b] text-white min-h-screen font-sans">
 
-  <div class="text-center">
-    <h1 class="text-7xl font-black mb-6">DRIPWEAR</h1>
+  <div class="max-w-7xl mx-auto p-8">
 
-    <p class="text-gray-400 text-xl mb-8">
-      Luxury Custom T-Shirt Builder
-    </p>
+    <div class="flex items-center justify-between mb-10">
+      <h1 class="text-4xl font-black tracking-wide">DRIPWEAR</h1>
 
-    <button class="bg-white text-black px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition">
-      Start Designing
-    </button>
+      <button class="bg-white text-black px-6 py-3 rounded-full font-semibold">
+        Custom Builder
+      </button>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+      <!-- TSHIRT PREVIEW -->
+      <div class="bg-[#111111] rounded-[40px] p-10 flex items-center justify-center min-h-[700px] border border-white/10">
+
+        <div id="shirt"
+          class="relative w-[340px] h-[430px] bg-white rounded-[50px] flex items-center justify-center shadow-2xl transition-all duration-300">
+
+          <!-- neck -->
+          <div class="absolute top-0 w-24 h-14 bg-[#0b0b0b] rounded-b-[30px]"></div>
+
+          <!-- uploaded image -->
+          <img id="designImage"
+            class="absolute w-40 hidden"
+            src=""
+          />
+
+          <!-- text -->
+          <h2 id="shirtText"
+            class="text-5xl font-black text-black text-center px-4 break-words">
+            DRIP
+          </h2>
+        </div>
+      </div>
+
+
+      <!-- CONTROLS -->
+      <div class="space-y-6">
+
+        <div class="bg-[#111111] p-8 rounded-[30px] border border-white/10">
+          <h2 class="text-2xl font-bold mb-6">Customise Your Tee</h2>
+
+          <div class="mb-6">
+            <label class="block mb-3 text-white/70">Custom Text</label>
+
+            <input
+              id="textInput"
+              type="text"
+              placeholder="Enter text"
+              class="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 outline-none"
+            />
+          </div>
+
+          <div class="mb-6">
+            <label class="block mb-3 text-white/70">T-Shirt Color</label>
+
+            <div class="flex gap-4 flex-wrap">
+              <button onclick="changeShirtColor('#ffffff')" class="w-12 h-12 rounded-full bg-white border-2 border-white/30"></button>
+
+              <button onclick="changeShirtColor('#000000')" class="w-12 h-12 rounded-full bg-black border-2 border-white"></button>
+
+              <button onclick="changeShirtColor('#8B0000')" class="w-12 h-12 rounded-full bg-red-900"></button>
+
+              <button onclick="changeShirtColor('#E6C79C')" class="w-12 h-12 rounded-full bg-yellow-200"></button>
+
+              <button onclick="changeShirtColor('#1e3a8a')" class="w-12 h-12 rounded-full bg-blue-900"></button>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label class="block mb-3 text-white/70">Text Color</label>
+
+            <div class="flex gap-4 flex-wrap">
+              <button onclick="changeTextColor('#000000')" class="w-12 h-12 rounded-full bg-black border border-white"></button>
+
+              <button onclick="changeTextColor('#ffffff')" class="w-12 h-12 rounded-full bg-white"></button>
+
+              <button onclick="changeTextColor('#8B0000')" class="w-12 h-12 rounded-full bg-red-900"></button>
+
+              <button onclick="changeTextColor('#facc15')" class="w-12 h-12 rounded-full bg-yellow-400"></button>
+            </div>
+          </div>
+
+          <div class="mb-8">
+            <label class="block mb-3 text-white/70">Upload Design</label>
+
+            <input
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              class="block w-full text-sm text-white"
+            />
+          </div>
+
+          <button class="w-full bg-white text-black py-4 rounded-2xl text-lg font-bold hover:scale-[1.02] transition">
+            Add To Cart
+          </button>
+        </div>
+
+
+        <div class="bg-[#111111] p-8 rounded-[30px] border border-white/10">
+          <h3 class="text-2xl font-bold mb-4">Premium Details</h3>
+
+          <div class="space-y-3 text-white/60">
+            <p>• 240 GSM Heavyweight Cotton</p>
+            <p>• Oversized Streetwear Fit</p>
+            <p>• HD Print Quality</p>
+            <p>• Live Design Preview</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
+
+  <script>
+    const shirt = document.getElementById('shirt')
+    const shirtText = document.getElementById('shirtText')
+    const textInput = document.getElementById('textInput')
+    const imageUpload = document.getElementById('imageUpload')
+    const designImage = document.getElementById('designImage')
+
+    textInput.addEventListener('input', () => {
+      shirtText.innerText = textInput.value || 'DRIP'
+    })
+
+    function changeShirtColor(color) {
+      shirt.style.background = color
+    }
+
+    function changeTextColor(color) {
+      shirtText.style.color = color
+    }
+
+    imageUpload.addEventListener('change', function(e) {
+      const file = e.target.files[0]
+
+      if(file) {
+        const reader = new FileReader()
+
+        reader.onload = function(event) {
+          designImage.src = event.target.result
+          designImage.classList.remove('hidden')
+        }
+
+        reader.readAsDataURL(file)
+      }
+    })
+  </script>
 
 </body>
 </html>
+
+
