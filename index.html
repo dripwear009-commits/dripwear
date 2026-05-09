@@ -9,6 +9,8 @@
 
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <style>
     .draggable {
       position: absolute;
@@ -32,6 +34,7 @@
           class="h-20 object-contain"
         />
       </div>
+
 
 
       <!-- VIEW SWITCH -->
@@ -63,6 +66,7 @@
 
 
 
+
       <!-- UPLOAD DESIGN -->
       <div class="mb-10">
 
@@ -78,6 +82,7 @@
         />
 
       </div>
+
 
 
 
@@ -101,7 +106,8 @@
 
 
 
-      <!-- ORDER BUTTON -->
+
+      <!-- SEND ORDER -->
       <button
         onclick="sendOrder()"
         class="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg"
@@ -110,6 +116,8 @@
       </button>
 
     </div>
+
+
 
 
 
@@ -137,6 +145,7 @@
 
 
 
+
           <!-- DESIGN -->
           <img
             id="logoDesign"
@@ -159,12 +168,19 @@
 
 
 
+
+
   <script>
+
+    // EMAILJS INIT
+    emailjs.init("tISRm6QXR7JTEHh4-")
+
 
     const shirtImage = document.getElementById('shirtImage')
     const designUpload = document.getElementById('designUpload')
     const logoDesign = document.getElementById('logoDesign')
     const sizeSlider = document.getElementById('sizeSlider')
+
 
 
 
@@ -180,6 +196,7 @@
       }
 
     }
+
 
 
 
@@ -208,6 +225,8 @@
 
 
 
+
+
     // RESIZE DESIGN
     sizeSlider.addEventListener('input', function() {
 
@@ -217,10 +236,13 @@
 
 
 
+
+
     // DRAG SYSTEM
     let isDragging = false
     let offsetX
     let offsetY
+
 
 
 
@@ -232,6 +254,7 @@
       offsetY = e.offsetY
 
     })
+
 
 
 
@@ -252,6 +275,7 @@
 
 
 
+
     document.addEventListener('mouseup', () => {
 
       isDragging = false
@@ -260,28 +284,50 @@
 
 
 
+
+
+
     // SEND ORDER
-    function sendOrder() {
+    async function sendOrder() {
 
-      html2canvas(document.getElementById('captureArea'))
-        .then(canvas => {
+      try {
 
-          // DOWNLOAD IMAGE
-          const link = document.createElement('a')
-
-          link.download = 'dripwear-design.png'
-
-          link.href = canvas.toDataURL()
-
-          link.click()
+        const canvas = await html2canvas(
+          document.getElementById('captureArea'),
+          {
+            backgroundColor: null
+          }
+        )
 
 
 
-          // OPEN EMAIL
-          window.location.href =
-            'mailto:d.r.i.p.wear009@gmail.com?subject=Custom%20Tshirt%20Order&body=Please%20attach%20the%20downloaded%20mockup%20PNG%20to%20this%20mail.'
+        const imageData = canvas.toDataURL('image/png')
 
-        })
+
+
+        await emailjs.send(
+          "service_hn2eeue",
+          "template_gknney9",
+          {
+            message: "New custom t-shirt order",
+
+            image: imageData
+          }
+        )
+
+
+
+        alert("Order sent successfully!")
+
+      }
+
+      catch(error) {
+
+        console.log(error)
+
+        alert("Failed to send order.")
+
+      }
 
     }
 
