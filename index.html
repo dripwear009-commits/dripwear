@@ -282,55 +282,59 @@
 
     })
 
+async function sendOrder() {
 
+  try {
 
-
-
-
-    // SEND ORDER
-    async function sendOrder() {
-
-      try {
-
-        const canvas = await html2canvas(
-          document.getElementById('captureArea'),
-          {
-            backgroundColor: null
-          }
-        )
-
-
-
-        const imageData = canvas.toDataURL('image/png')
-
-
-
-      await emailjs.send(
-  "service_hn2eeue",
-  "template_gknney9",
-  {
-    message: "New custom t-shirt order",
-
-    image: imageData
-  },
-  "tISRm6QXR7JTEHh4-"
-)
-
-
-        alert("Order sent successfully!")
-
+    const canvas = await html2canvas(
+      document.getElementById('captureArea'),
+      {
+        backgroundColor: null,
+        scale: 1
       }
+    )
 
-      catch(error) {
 
-        console.log(error)
 
-        alert("Failed to send order.")
+    // SMALLER IMAGE
+    const imageData = canvas.toDataURL(
+      'image/jpeg',
+      0.5
+    )
 
-      }
 
-    }
 
+    await emailjs.send(
+      "service_hn2eeue",
+      "template_gknney9",
+      {
+        message: imageData
+      },
+      "tISRm6QXR7JTEHh4-"
+    )
+
+
+
+    alert("Order sent successfully!")
+
+  }
+
+  catch(error) {
+
+    console.log(error)
+
+    alert(
+      "Failed to send order. Check console."
+    )
+
+  }
+
+}
+
+
+
+
+   
   </script>
 
 </body>
