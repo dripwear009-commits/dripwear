@@ -107,6 +107,26 @@
 
 
 
+      <!-- QUANTITY -->
+      <div class="mb-10">
+
+        <p class="text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          Quantity
+        </p>
+
+        <input
+          id="quantityInput"
+          type="number"
+          min="1"
+          value="1"
+          class="w-full bg-white/10 border border-white/10 rounded-2xl px-4 py-3 text-white outline-none"
+        />
+
+      </div>
+
+
+
+
       <!-- SEND ORDER -->
       <button
         onclick="sendOrder()"
@@ -180,6 +200,7 @@
     const designUpload = document.getElementById('designUpload')
     const logoDesign = document.getElementById('logoDesign')
     const sizeSlider = document.getElementById('sizeSlider')
+    const quantityInput = document.getElementById('quantityInput')
 
 
 
@@ -282,62 +303,67 @@
 
     })
 
-async function sendOrder() {
 
-  try {
 
-    const canvas = await html2canvas(
-      document.getElementById('captureArea'),
-      {
-        backgroundColor: null,
-        scale: 1
+
+
+
+    // SEND ORDER
+    async function sendOrder() {
+
+      try {
+
+        const quantity = quantityInput.value || 1
+
+        const canvas = await html2canvas(
+          document.getElementById('captureArea'),
+          {
+            backgroundColor: null,
+            scale: 1
+          }
+        )
+
+
+
+        // IMAGE
+        const imageData = canvas.toDataURL(
+          'image/jpeg',
+          0.5
+        )
+
+
+
+        await emailjs.send(
+          "service_hn2eeue",
+          "template_gknney9",
+          {
+            message: imageData,
+            quantity: quantity
+          },
+          "tISRm6QXR7JTEHh4-"
+        )
+
+
+
+        alert(
+          "Order sent successfully!"
+        )
+
       }
-    )
 
+      catch(error) {
 
+        console.log(error)
 
-    // SMALLER IMAGE
-    const imageData = canvas.toDataURL(
-      'image/jpeg',
-      0.5
-    )
+        alert(
+          "Failed to send order. Check console."
+        )
 
+      }
 
+    }
 
-    await emailjs.send(
-      "service_hn2eeue",
-      "template_gknney9",
-      {
-        message: imageData
-      },
-      "tISRm6QXR7JTEHh4-"
-    )
-
-
-
-    alert("Order sent successfully!")
-
-  }
-
-  catch(error) {
-
-    console.log(error)
-
-    alert(
-      "Failed to send order. Check console."
-    )
-
-  }
-
-}
-
-
-
-
-   
   </script>
 
 </body>
 </html>
-
-
